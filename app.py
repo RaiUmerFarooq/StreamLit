@@ -5,6 +5,10 @@ import joblib
 import tensorflow as tf
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+# Define label columns globally
+label_columns = ['type_blocker', 'type_regression', 'type_bug', 'type_documentation', 
+                 'type_enhancement', 'type_task', 'type_dependency_upgrade']
+
 # Load models and preprocessing objects
 lr_multi = joblib.load('lr_multi_defect.pkl')
 svm_multi = joblib.load('svm_multi_defect.pkl')
@@ -36,8 +40,6 @@ if st.button("Predict"):
         else:
             pred = (dnn_multi.predict(X_scaled) > 0.5).astype(int)
 
-        label_columns = ['type_blocker', 'type_regression', 'type_bug', 'type_documentation', 
-                        'type_enhancement', 'type_task', 'type_dependency_upgrade']
         result = dict(zip(label_columns, pred[0]))
         st.write("Predicted Defect Types:")
         st.json(result)
